@@ -1,4 +1,4 @@
-package similar
+package report
 
 import (
 	"fmt"

@@ -11,17 +11,17 @@ import (
 	"github.com/whosonfirst/go-dedupe/embeddings"
 )
 
-type ProcessResult struct {
+type PrepareResult struct {
 	Image      image.Image
 	Embeddings []float32
 }
 
-func Process(ctx context.Context, emb embeddings.Embedder, r io.ReadSeeker) (*ProcessResult, error) {
+func Prepare(ctx context.Context, emb embeddings.Embedder, r io.ReadSeeker) (*PrepareResult, error) {
 
 	t1 := time.Now()
 
 	defer func() {
-		slog.Debug("Time to process record", "time", time.Since(t1))
+		slog.Debug("Time to prepare record", "time", time.Since(t1))
 	}()
 
 	im, _, err := image.Decode(r)
@@ -33,13 +33,13 @@ func Process(ctx context.Context, emb embeddings.Embedder, r io.ReadSeeker) (*Pr
 	_, err = r.Seek(0, 0)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Failed to rewind reader, %w", err)
 	}
 
 	body, err := io.ReadAll(r)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Failed to read body, %w", err)
 	}
 
 	embeddings, err := emb.ImageEmbeddings32(ctx, body)
@@ -48,7 +48,7 @@ func Process(ctx context.Context, emb embeddings.Embedder, r io.ReadSeeker) (*Pr
 		return nil, fmt.Errorf("Failed to generate embeddings, %w", err)
 	}
 
-	pr := &ProcessResult{
+	pr := &PrepareResult{
 		Image:      im,
 		Embeddings: embeddings,
 	}
