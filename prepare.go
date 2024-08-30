@@ -11,11 +11,15 @@ import (
 	"github.com/whosonfirst/go-dedupe/embeddings"
 )
 
+// PrepareResult is a struct containing the results derived by the `Prepare` method.
 type PrepareResult struct {
+	// Image is the `image.Image` instance that was decoded.
 	Image      image.Image
+	// Embeddings are the (vector) embeddings derived from 'Image'.
 	Embeddings []float32
 }
 
+// Prepare() derives (vector) embeddings for an image file encoded in 'r' using 'emb'.
 func Prepare(ctx context.Context, emb embeddings.Embedder, r io.ReadSeeker) (*PrepareResult, error) {
 
 	t1 := time.Now()

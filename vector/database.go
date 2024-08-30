@@ -10,13 +10,19 @@ import (
 	"github.com/aaronland/go-roster"
 )
 
+// Image is a struct containing data to be stored in a `Database` instance.
 type Image struct {
+	// ID is the application-specific unique-identifer for the image being stored.
 	ID         string    `json:"id"`
+	// Embeddings are the (vector) embeddings of the image being stored.
 	Embeddings []float32 `json:"embeddings"`
 }
 
+// Match is a struct containing data about records that matched a query.
 type Match struct {
+	// ID is the application-specific unique-identifer for the image that matched a query.	
 	ID         string  `json:"id"`
+	// Similarity is the "distance" or "score" of the image that matched a query.
 	Similarity float32 `json:"similarity"`
 }
 
@@ -26,7 +32,7 @@ type Database interface {
 	Add(context.Context, *Image) error
 	// Query results a list of `Match` instances for images matching a `Image` in the underlying database implementation.
 	Query(context.Context, *Image) ([]*Match, error)
-	// MeetsThreshold returns a boolean value indicating whether a `QueryResult` instance satisfies a given threshold value.
+	// MeetsThreshold returns a boolean value indicating whether a `Match` instance satisfies a given threshold value.
 	MeetsThreshold(context.Context, *Match, float64) (bool, error)
 	// Close performs and terminating functions required by the database.
 	Close(context.Context) error

@@ -15,6 +15,9 @@ type ImageMatch struct {
 	Similarity float32
 }
 
+// CombineImages() sorts all the images defined by 'images' according to their "similarity" score in ascending
+// order and then combines them in to a montage with (1) row and (n) columns. Each image is scaled to a maximum
+// dimension of 250 pixels.
 func CombineImages(images []*ImageMatch) (image.Image, error) {
 
 	// https://github.com/ashleymcnamara/artwork/blob/master/collage.go

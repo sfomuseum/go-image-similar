@@ -1,3 +1,5 @@
+//go:build duckdb
+
 package vector
 
 // https://duckdb.org/2024/05/03/vector-similarity-search-vss.html
