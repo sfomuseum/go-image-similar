@@ -1,0 +1,6 @@
+*~
+bin
+work
+*libduckdb.a
+*.png
+fixtures
