@@ -10,26 +10,29 @@ import (
 	"image/color"
 )
 
-type ImageMatch struct {
+// CombineImagesInput is a struct containing image data to be passed to the `CombineImages` method.
+type CombineImagesInput struct {
+	// The underlying `image.Image` instance being combined.	
 	Image      image.Image
+	// The "score" of the image being combined relative to another image (typically the first in a list of the `CombineImagesInput` instances).
 	Similarity float32
 }
 
 // CombineImages() sorts all the images defined by 'images' according to their "similarity" score in ascending
 // order and then combines them in to a montage with (1) row and (n) columns. Each image is scaled to a maximum
 // dimension of 250 pixels.
-func CombineImages(images []*ImageMatch) (image.Image, error) {
+func CombineImages(input []*CombineImagesInput) (image.Image, error) {
 
 	// https://github.com/ashleymcnamara/artwork/blob/master/collage.go
 
-	cols := len(images)
+	cols := len(input)
 	cell := 250
 
-	rows := (len(images) + cols - 1) / cols
+	rows := (cols + cols - 1) / cols
 	dst := image.NewRGBA(image.Rect(0, 0, cell*cols, cell*rows))
 	draw.Draw(dst, dst.Bounds(), image.NewUniform(color.RGBA{0xFF, 0xFF, 0xFF, 0xFF}), image.Point{}, draw.Src)
 
-	for i, m := range images {
+	for i, m := range input {
 
 		im := m.Image
 
